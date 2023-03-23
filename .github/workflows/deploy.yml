@@ -1,4 +1,4 @@
-name: Build and Deploy Infinite Runner
+name: Build and Deploy SpaceGeese
 
 on:
   push:
