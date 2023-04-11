@@ -1,13 +1,13 @@
-import EventHandler from "./EventHandler";
-import InputListener from "./InputListener";
-import Machine from "./Machine";
+import EventHandler from "./EventHandler.js";
+import InputListener from "./InputListener.js";
+import Machine from "./Machine.js";
 
 class GameEngine {
     constructor() {
         this.eventHandler = new EventHandler()
         this.machine = new Machine();
         this.inputListener = new InputListener();
-        this.game = undefined;
+        this.app = undefined;
     }
 
     clear() {

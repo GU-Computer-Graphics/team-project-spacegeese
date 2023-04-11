@@ -1,5 +1,5 @@
-import Game from './Game';
+import App from './App.js';
 
-const game = new Game;
+const app = new App();
 
-game.main();
+app.main();

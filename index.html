@@ -8,42 +8,46 @@
     <title>Space Geese</title>
     <style>
         canvas {
+            --margin: 50px;
             display: block;
-            margin: 10px auto;
-            width: 80%;
-            height: 80%;
+            margin: var(--margin);
+            width: calc(100% - 2 * var(--margin));
+            height: calc(100% - 2 * var(--margin));
+        }
+
+        #c {
+            margin: auto;
+            height: 100%;
+            width: 100%;
+            justify-content: inherit;
+            align-items: inherit;
+            display: grid;
+        }
+
+        html {
+            margin: 0px;
+            height: 100%;
+            width: 100%;
         }
 
         body {
             background-color:white;
+            margin: 0px;
+            height: 100%;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+            display: flex;
         }
 
         p {
             text-align: center;
             font-size: larger;
         }
-
-        a { 
-            color: #80ef71;
-        } 
-
-        a:visited {
-            color: #56d5fc;
-            background-color: transparent;
-            text-decoration: none;
-        }
-
-        a:hover { 
-            color: #ff8080;
-            text-decoration-color: #ff8080; 
-            text-decoration: underline;
-        }
     </style>
-    <script src="dist/bundle.js" defer></script>
+    <script src="src/index.js" type="module" defer></script>
   </head>
   <body>
     <div id="c"></div>
-    <p>Quit: Escape, Restart: R, Movement: WASD, Camera: ↑/↓/🡠/🡢</p>
-    <p>made by <a href="https://github.com/TheRedLancer">Zach Burnaby</a></p>
 </body>
 </html>

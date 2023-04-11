@@ -1,8 +1,9 @@
-import * as THREE from 'three'
-import Engine from './Engine/Engine';
-import OpenLevel from './Components/Level';
+import * as THREE from './lib/three.module.js'
+import Engine from './Engine/Engine.js';
+import Level from './Components/Level.js';
+import Camera from './Components/Camera.js';
 
-class Game { 
+class App {
     constructor() {
         this.renderer = new THREE.WebGLRenderer();
         // Zach: uncomment for shadows
@@ -15,27 +16,46 @@ class Game {
         this.renderer.setClearColor("grey", 1);
     }
 
+    render() {
+        this.renderer.render(this.scene, this.camera);
+    }
+
     main() {
         this.setup();
         Engine.inputListener.start();
-        this.renderer.render(this.scene, this.camera);
+        this.render();
         this.start();
     }
 
-    getScene() {
-        return this.scene;
-    }
-
     setup() {
-        Engine.game = this;
+        Engine.app = this;
         this.scene = new THREE.Scene();
-        this.camera = new THREE.PerspectiveCamera(75, this.canvas.offsetWidth / this.canvas.offsetHeight, 0.5, 1000);
+
+        const cameraParams = {
+            near: 1,
+            far: 1000,
+            fov: 75, // degrees
+            aspectRatio: this.canvas.offsetWidth / this.canvas.offsetHeight,
+            atX: 0,
+            atY: 0,
+            atZ: 0,
+            eyeX: 0,
+            eyeY: 30,
+            eyeZ: 40,
+            upX: 0,
+            upY: 1,
+            upZ: 0,
+        };
+
+        this.camera = new Camera(cameraParams);
+        this.camera.setupCameraControls(this.canvas, () => this.render);
 
         // Load initial level
-        this.level = new OpenLevel().load(this.scene, this.camera);
+        this.level = new Level().load(this.scene);
 
         Engine.machine.addCallback(() => {
             this.renderer.render(this.scene, this.camera);
+            // console.log("Rendering");
         });
     }
 
@@ -52,6 +72,10 @@ class Game {
         Engine.machine.start();
     }
 
+    getScene() {
+        return this.scene;
+    }
+
     reset() {
         Engine.clear();
         // TODO: Dispose of all materials and geometries
@@ -65,4 +89,4 @@ class Game {
     }
 }
 
-export default Game;
+export default App;
