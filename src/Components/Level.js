@@ -18,7 +18,7 @@ export default class Level extends THREE.Group {
             new THREE.MeshBasicMaterial({color: 0xeebbee})
         );
         ground.rotateX(- Math.PI / 2);
-        scene.add(ground);1
+        scene.add(ground);
 
         let asteroid1 = new Asteroid();
         asteroid1.position.set(-10, 5, -10);
