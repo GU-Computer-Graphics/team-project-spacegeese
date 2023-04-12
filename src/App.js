@@ -55,21 +55,28 @@ class App {
 
         Engine.machine.addCallback(() => {
             this.renderer.render(this.scene, this.camera);
-            // console.log("Rendering");
+        });
+
+        Engine.inputListener.setCaster((payload) => {
+            Engine.eventHandler.dispatch('inputListener', payload);
+            console.log(payload);
         });
     }
 
     start() {
         // Start/Stop controls
         Engine.eventHandler.subscribe('inputListener', (payload) => {
-            if (payload.code === "Escape" && payload.isPressed) {
+            if (payload.code === "Escape" && payload.pressed) {
                 Engine.machine.stop();
+                console.log("stop");
             }
-            if (payload.code === "KeyR" && payload.isPressed) {
+            if (payload.code === "KeyR" && payload.pressed) {
                 this.reset();
+                console.log("reset");
             }
         });
         Engine.machine.start();
+        console.log(Engine);
     }
 
     getScene() {
@@ -78,7 +85,6 @@ class App {
 
     reset() {
         Engine.clear();
-        // TODO: Dispose of all materials and geometries
         while(this.scene.children.length > 0){
             if (this.scene.children[0].hasOwnProperty('dispose')) {
                 this.scene.children[0].dispose();

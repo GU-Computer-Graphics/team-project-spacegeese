@@ -11,7 +11,7 @@ export default class Level extends THREE.Group {
     load(scene) {
         let ground = new THREE.Mesh(
             new THREE.PlaneGeometry(100, 100),
-            new THREE.MeshBasicMaterial({color: 0x20FF20})
+            new THREE.MeshBasicMaterial({color: 0xeebbee})
         );
         ground.rotateX(- Math.PI / 2);
         scene.add(ground);

@@ -17,12 +17,20 @@ class InputListener {
     down(e) {
         if (this.inputs[e.code]) return;
         this.inputs[e.code] = true;
-        this.caster([e.code, true, this.inputs]);
+        this.caster({
+            code: e.code,
+            pressed: true,
+            inputs: this.inputs
+        });
     }
 
     up(e) {
         this.inputs[e.code] = false;
-        this.caster([e.code, false, this.inputs]);
+        this.caster({
+            code: e.code,
+            pressed: false,
+            inputs: this.inputs
+        });
     }
 
     start() {
