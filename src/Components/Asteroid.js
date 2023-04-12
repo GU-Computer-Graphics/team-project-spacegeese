@@ -15,7 +15,15 @@ export default class Asteroid extends THREE.Group {
         this.add(this.mesh);
         this.direction = new THREE.Vector3(0, 0, 1);
         this.speed = 0;
-        Engine.machine.addCallback(this.update.bind(this));
+        this.name = "asteroid";
+        this.update = this.update.bind(this);
+        Engine.machine.addCallback(this.update);
+        Engine.eventHandler.subscribe('bulletCollision', (payload) => {
+            if (payload.object.parent === this) {
+                console.log("Hit asteroid at", this.position);
+                this.explode();
+            }
+        });
     }
 
     update(delta_t) {
@@ -23,6 +31,6 @@ export default class Asteroid extends THREE.Group {
     }
 
     explode() {
-        console.log("Explode!");
+        console.log("Explode Asteroid!");
     }
 }

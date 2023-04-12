@@ -12,5 +12,7 @@ export default class Portal extends THREE.Group {
         this.mesh = new THREE.Mesh(this.geometry, this.material);
         this.mesh.rotateY(Math.PI / 2);
         this.add(this.mesh);
+
+        this.name = "asteroid";
     }
 }
