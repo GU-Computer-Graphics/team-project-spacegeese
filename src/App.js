@@ -51,7 +51,8 @@ class App {
         this.camera.setupCameraControls(this.canvas, () => this.render);
 
         // Load initial level
-        this.level = new Level().load(this.scene);
+        this.level = new Level()
+        this.level.load(this.scene);
 
         Engine.machine.addCallback(() => {
             this.renderer.render(this.scene, this.camera);

@@ -3,6 +3,7 @@ import Engine from '../Engine/Engine.js';
 import Asteroid from './Asteroid.js';
 import Portal from './Portal.js';
 import Ship from './Ship.js';
+import { GLTFLoader } from '../lib/gltfLoader.js';
 
 export default class Level extends THREE.Group {
     constructor() {
@@ -13,6 +14,20 @@ export default class Level extends THREE.Group {
     }
 
     load(scene) {
+        const loader = new GLTFLoader();
+        Promise.all([
+            loader.loadAsync('./src/assets/spaceballs_rv.glb'),
+            loader.loadAsync('./src/assets/spaceballs_rv.glb'),
+            loader.loadAsync('./src/assets/spaceballs_rv.glb'),
+            loader.loadAsync('./src/assets/stargate.glb'),
+            loader.loadAsync('./src/assets/daphne_planetoid.glb'),
+        ])
+        .then((models) => {
+            this.setup(scene, models);
+        });
+    }
+
+    setup(scene, models) {
         let ground = new THREE.Mesh(
             new THREE.PlaneGeometry(100, 100),
             new THREE.MeshBasicMaterial({color: 0xeebbee})
@@ -20,15 +35,15 @@ export default class Level extends THREE.Group {
         ground.rotateX(- Math.PI / 2);
         scene.add(ground);
 
-        let asteroid1 = new Asteroid();
+        let asteroid1 = new Asteroid(models[4]);
         asteroid1.position.set(-10, 5, -10);
         scene.add(asteroid1);
 
-        let portal = new Portal();
+        let portal = new Portal(models[3]);
         portal.position.set(-20, 10, 15);
         scene.add(portal);
 
-        let ship1 = new Ship();
+        let ship1 = new Ship(models[0]);
         ship1.position.set(-5, 10, 15);
         ship1.lookAt(portal.position);
         scene.add(ship1);
@@ -39,7 +54,7 @@ export default class Level extends THREE.Group {
             }
         });
 
-        let ship2 = new Ship();
+        let ship2 = new Ship(models[1]);
         ship2.position.set(15, 15, 15);
         ship2.lookAt(asteroid1.position);
         scene.add(ship2);
@@ -50,7 +65,7 @@ export default class Level extends THREE.Group {
             }
         });
 
-        let ship3 = new Ship();
+        let ship3 = new Ship(models[2]);
         ship3.position.set(0, 5, -20);
         ship3.lookAt(ship2.position);
         scene.add(ship3);
@@ -60,6 +75,9 @@ export default class Level extends THREE.Group {
                 console.log("fire ship3");
             }
         });
+
+        let light = new THREE.AmbientLight();
+        scene.add(light);
 
         return this;
     }
