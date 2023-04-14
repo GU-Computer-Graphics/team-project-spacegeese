@@ -3,6 +3,7 @@ import Engine from '../Engine/Engine.js';
 import Asteroid from './Asteroid.js';
 import Portal from './Portal.js';
 import Ship from './Ship.js';
+import { GLTFLoader } from '../lib/gltfLoader.js';
 
 export default class Level extends THREE.Group {
     constructor() {
@@ -13,10 +14,11 @@ export default class Level extends THREE.Group {
     }
 
     load(scene) {
+        const loader = new GLTFLoader();
         Promise.all([
-            loadModel('./src/assets/spaceballs_rv.glb'),
-            loadModel('./src/assets/spaceballs_rv.glb'),
-            loadModel('./src/assets/spaceballs_rv.glb'),
+            loader.loadAsync('./src/assets/spaceballs_rv.glb'),
+            loader.loadAsync('./src/assets/spaceballs_rv.glb'),
+            loader.loadAsync('./src/assets/spaceballs_rv.glb'),
         ])
         .then((models) => {
             this.setup(scene, models);
