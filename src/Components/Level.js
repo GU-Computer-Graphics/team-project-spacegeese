@@ -19,6 +19,7 @@ export default class Level extends THREE.Group {
             loader.loadAsync('./src/assets/spaceballs_rv.glb'),
             loader.loadAsync('./src/assets/spaceballs_rv.glb'),
             loader.loadAsync('./src/assets/spaceballs_rv.glb'),
+            loader.loadAsync('./src/assets/stargate.glb')
         ])
         .then((models) => {
             this.setup(scene, models);
@@ -37,7 +38,7 @@ export default class Level extends THREE.Group {
         asteroid1.position.set(-10, 5, -10);
         scene.add(asteroid1);
 
-        let portal = new Portal();
+        let portal = new Portal(models[3]);
         portal.position.set(-20, 10, 15);
         scene.add(portal);
 
