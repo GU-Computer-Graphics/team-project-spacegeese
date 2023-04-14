@@ -19,7 +19,8 @@ export default class Level extends THREE.Group {
             loader.loadAsync('./src/assets/spaceballs_rv.glb'),
             loader.loadAsync('./src/assets/spaceballs_rv.glb'),
             loader.loadAsync('./src/assets/spaceballs_rv.glb'),
-            loader.loadAsync('./src/assets/stargate.glb')
+            loader.loadAsync('./src/assets/stargate.glb'),
+            loader.loadAsync('./src/assets/daphne_planetoid.glb'),
         ])
         .then((models) => {
             this.setup(scene, models);
@@ -34,7 +35,7 @@ export default class Level extends THREE.Group {
         ground.rotateX(- Math.PI / 2);
         scene.add(ground);
 
-        let asteroid1 = new Asteroid();
+        let asteroid1 = new Asteroid(models[4]);
         asteroid1.position.set(-10, 5, -10);
         scene.add(asteroid1);
 
