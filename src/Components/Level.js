@@ -13,6 +13,17 @@ export default class Level extends THREE.Group {
     }
 
     load(scene) {
+        Promise.all([
+            loadModel('./src/assets/spaceballs_rv.glb'),
+            loadModel('./src/assets/spaceballs_rv.glb'),
+            loadModel('./src/assets/spaceballs_rv.glb'),
+        ])
+        .then((models) => {
+            this.setup(scene, models);
+        });
+    }
+
+    setup(scene, models) {
         let ground = new THREE.Mesh(
             new THREE.PlaneGeometry(100, 100),
             new THREE.MeshBasicMaterial({color: 0xeebbee})
@@ -28,7 +39,7 @@ export default class Level extends THREE.Group {
         portal.position.set(-20, 10, 15);
         scene.add(portal);
 
-        let ship1 = new Ship();
+        let ship1 = new Ship(models[0]);
         ship1.position.set(-5, 10, 15);
         ship1.lookAt(portal.position);
         scene.add(ship1);
@@ -39,7 +50,7 @@ export default class Level extends THREE.Group {
             }
         });
 
-        let ship2 = new Ship();
+        let ship2 = new Ship(models[1]);
         ship2.position.set(15, 15, 15);
         ship2.lookAt(asteroid1.position);
         scene.add(ship2);
@@ -50,7 +61,7 @@ export default class Level extends THREE.Group {
             }
         });
 
-        let ship3 = new Ship();
+        let ship3 = new Ship(models[2]);
         ship3.position.set(0, 5, -20);
         ship3.lookAt(ship2.position);
         scene.add(ship3);
@@ -60,6 +71,9 @@ export default class Level extends THREE.Group {
                 console.log("fire ship3");
             }
         });
+
+        let light = new THREE.AmbientLight();
+        scene.add(light);
 
         return this;
     }
