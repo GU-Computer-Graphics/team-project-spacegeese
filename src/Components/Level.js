@@ -1,8 +1,8 @@
-import * as THREE from '../lib/three.module.js'
-import Engine from '../Engine/Engine.js';
-import Asteroid from './Asteroid.js';
-import Portal from './Portal.js';
-import Ship from './Ship.js';
+import * as THREE from "../lib/three.module.js";
+import Engine from "../Engine/Engine.js";
+import Asteroid from "./Asteroid.js";
+import Portal from "./Portal.js";
+import Ship from "./Ship.js";
 
 export default class Level extends THREE.Group {
     constructor() {
@@ -15,9 +15,9 @@ export default class Level extends THREE.Group {
     load(scene) {
         let ground = new THREE.Mesh(
             new THREE.PlaneGeometry(100, 100),
-            new THREE.MeshBasicMaterial({color: 0xeebbee})
+            new THREE.MeshBasicMaterial({ color: 0xeebbee })
         );
-        ground.rotateX(- Math.PI / 2);
+        ground.rotateX(-Math.PI / 2);
         scene.add(ground);
 
         let asteroid1 = new Asteroid();
@@ -32,10 +32,16 @@ export default class Level extends THREE.Group {
         ship1.position.set(-5, 10, 15);
         ship1.lookAt(portal.position);
         scene.add(ship1);
-        Engine.eventHandler.subscribe('inputListener', (payload) => {
+        Engine.eventHandler.subscribe("inputListener", (payload) => {
             if (payload.code === "Digit1" && payload.pressed) {
                 ship1.fire();
                 console.log("fire ship1");
+            }
+            if (payload.code === "KeyQ" && payload.pressed) {
+                ship1.moveTo(
+                    portal.position.clone().add(new THREE.Vector3(-4, 0, 0))
+                );
+                console.log("move ship1");
             }
         });
 
@@ -43,7 +49,7 @@ export default class Level extends THREE.Group {
         ship2.position.set(15, 15, 15);
         ship2.lookAt(asteroid1.position);
         scene.add(ship2);
-        Engine.eventHandler.subscribe('inputListener', (payload) => {
+        Engine.eventHandler.subscribe("inputListener", (payload) => {
             if (payload.code === "Digit2" && payload.pressed) {
                 ship2.fire();
                 console.log("fire ship2");
@@ -54,7 +60,7 @@ export default class Level extends THREE.Group {
         ship3.position.set(0, 5, -20);
         ship3.lookAt(ship2.position);
         scene.add(ship3);
-        Engine.eventHandler.subscribe('inputListener', (payload) => {
+        Engine.eventHandler.subscribe("inputListener", (payload) => {
             if (payload.code === "Digit3" && payload.pressed) {
                 ship3.fire();
                 console.log("fire ship3");
