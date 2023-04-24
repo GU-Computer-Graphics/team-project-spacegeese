@@ -15,7 +15,7 @@ export default class Portal extends THREE.Group {
         this.mesh.rotateY(Math.PI / 2);
         this.add(this.mesh);
 
-        this.portalImageGeometry = new THREE.PlaneGeometry(6, 6);
+        this.portalImageGeometry = new THREE.CircleGeometry(5);
         this.portalImageMaterial = new THREE.MeshBasicMaterial({
             color: "green",
         });
