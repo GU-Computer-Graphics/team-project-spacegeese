@@ -2,18 +2,14 @@ import * as THREE from "../lib/three.module.js";
 import Engine from "../Engine/Engine.js";
 import Bullet from "./Bullet.js";
 
-const shipGeo = new THREE.ConeGeometry(3, 6);
-const shipMaterial = new THREE.MeshNormalMaterial();
-
 export default class Ship extends THREE.Group {
-    constructor() {
+    constructor(model) {
         super();
-
-        this.geometry = shipGeo;
-        this.material = shipMaterial;
-        this.mesh = new THREE.Mesh(this.geometry, this.material);
+        this.mesh = model.scene
+        this.add(model.scene)
+        this.mesh.rotation.set(0, -Math.PI / 2, 0)
+        this.mesh.position.set(-1, 0, 0)
         this.add(this.mesh);
-        this.mesh.rotateX(Math.PI / 2);
         this.direction = new THREE.Vector3(0, 0, 1);
         this.speed = 0;
         this.name = "ship";
