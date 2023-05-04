@@ -4,6 +4,7 @@ import Asteroid from './Asteroid.js';
 import Portal from './Portal.js';
 import Ship from './Ship.js';
 import { GLTFLoader } from '../lib/gltfLoader.js';
+import * as Dat from '../lib/dat.gui.module.js';
 
 export default class Level extends THREE.Group {
     constructor() {
@@ -11,6 +12,10 @@ export default class Level extends THREE.Group {
         this.maxX = 200;
         this.maxY = 200;
         this.maxZ = 200;
+        this.gui = new Dat.GUI();
+        this.parameters = {
+            ambientBrightness: 1,
+        }
     }
 
     load(scene) {
@@ -76,9 +81,15 @@ export default class Level extends THREE.Group {
             }
         });
 
-        let light = new THREE.AmbientLight();
+        let light = new THREE.AmbientLight(0xffffff, this.parameters.ambientBrightness);
         scene.add(light);
 
+        this.gui.add(this.parameters, 'ambientBrightness', 0, 2).name("Ambient Brightness").onChange(() => {
+            console.log("changed brightness")
+            scene.remove(light);
+            light = new THREE.AmbientLight(0xffffff, this.parameters.ambientBrightness);
+            scene.add(light)
+        })
         return this;
     }
 }
