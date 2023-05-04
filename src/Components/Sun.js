@@ -1,10 +1,17 @@
 import * as THREE from "../lib/three.module.js";
 
-const sunGeo = new THREE.SphereGeometry(3);
+const sunGeo = new THREE.SphereGeometry(10);
+let loader = new THREE.TextureLoader();
+let texture = loader.load("./src/images/sunSurfaceMaterial.jpg", () => {
+  true;
+});
 const sunMaterial = new THREE.MeshPhongMaterial({
-  color: 0xffa500,
+  color: 0xffffff,
+  map: texture,
   specular: 0xfffd00,
   shininess: 36,
+  transparency: true,
+  opacity: 0.2,
 });
 
 export default class Sun extends THREE.Group {
