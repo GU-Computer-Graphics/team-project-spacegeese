@@ -6,6 +6,7 @@ import Ship from "./Ship.js";
 import { GLTFLoader } from "../lib/gltfLoader.js";
 import Sun from "./Sun.js";
 import Explosion from "./Explosion.js";
+import * as Dat from "../lib/dat.gui.module.js"
 
 export default class Level extends THREE.Group {
     constructor() {
@@ -13,6 +14,10 @@ export default class Level extends THREE.Group {
         this.maxX = 200;
         this.maxY = 200;
         this.maxZ = 200;
+        this.gui = new Dat.GUI();
+        this.parameters = {
+            ambientBrightness: 10,
+        }
     }
 
     load(scene) {
@@ -97,7 +102,7 @@ export default class Level extends THREE.Group {
         sun.position.set(0, -30, 0);
         scene.add(sun);
 
-        const pointlight = new THREE.PointLight(0xfffd00, 10, 200);
+        let pointlight = new THREE.PointLight(0xfffd00, this.parameters.ambientBrightness, 200);
         pointlight.position.set(0, -30, 0);
         scene.add(pointlight);
 
@@ -105,8 +110,13 @@ export default class Level extends THREE.Group {
 
         const spotlight = new THREE.SpotLight(0xffd00, 4, 100, Math.PI / 2);
         spotlight.position.set(0, 10, 0);
-        // scene.add(spotlight);
 
+        this.gui.add(this.parameters, 'ambientBrightness', 0, 20).name("Lighting Intensity").onChange(() => {
+            console.log("changed brightness")
+            scene.remove(pointlight);
+            pointlight = new THREE.AmbientLight(0xffffff, this.parameters.ambientBrightness);
+            scene.add(pointlight)
+        })
         return this;
     }
 }
