@@ -2,6 +2,7 @@ import * as THREE from './lib/three.module.js'
 import Engine from './Engine/Engine.js';
 import Level from './Components/Level.js';
 import Camera from './Components/Camera.js';
+import {GUI} from "./lib/dat.gui.module.js"
 
 class App {
     constructor() {
@@ -14,6 +15,8 @@ class App {
         c.appendChild(this.canvas);
         this.renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight);
         this.renderer.setClearColor("grey", 1);
+        this.gui = new GUI();
+        this.isGUISetup = false;
     }
 
     render() {
@@ -51,7 +54,7 @@ class App {
         this.camera.setupCameraControls(this.canvas, () => this.render);
 
         // Load initial level
-        this.level = new Level()
+        this.level = new Level(this.gui)
         this.level.load(this.scene);
 
         Engine.machine.addCallback(() => {
