@@ -5,18 +5,17 @@ import Portal from "./Portal.js";
 import Ship from "./Ship.js";
 import { GLTFLoader } from "../lib/gltfLoader.js";
 import Sun from "./Sun.js";
-import Explosion from "./Explosion.js";
-import * as Dat from "../lib/dat.gui.module.js"
 
 export default class Level extends THREE.Group {
-    constructor() {
+    constructor(gui) {
         super();
         this.maxX = 200;
         this.maxY = 200;
         this.maxZ = 200;
-        this.gui = new Dat.GUI();
+        this.gui = gui;
         this.parameters = {
-            ambientBrightness: 10,
+            ambientBrightness: 0.7,
+            sunBrightness: 1,
         }
     }
 
@@ -35,36 +34,36 @@ export default class Level extends THREE.Group {
     }
 
   setup(scene, models) {
-    let loader = new THREE.TextureLoader();
-    let texture = loader.load("./src/images/space.png", () => {
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load("./src/images/space.png", () => {
       true;
     });
-    let ground = new THREE.Mesh(
-      new THREE.BoxGeometry(500, 500, 500),
-      new THREE.MeshLambertMaterial({
+    const boundary = new THREE.Mesh(
+      new THREE.BoxGeometry(1000, 1000, 1000),
+      new THREE.MeshStandardMaterial({
         color: 0xeebbee,
         side: THREE.BackSide,
         map: texture,
       })
     );
-    ground.rotateX(-Math.PI / 2);
-    ground.position.set(0, -10, 0);
-    scene.add(ground);
+    boundary.rotateX(-Math.PI / 2);
+    boundary.position.set(0, -10, 0);
+    scene.add(boundary);
 
-        let asteroid1 = new Asteroid(models[5]);
+        const asteroid1 = new Asteroid(models[5]);
         asteroid1.position.set(-10, 5, -10);
         scene.add(asteroid1);
 
-        let portalIn = new Portal(models[3]);
+        const portalIn = new Portal(models[3]);
         portalIn.position.set(-30, 10, 15);
         scene.add(portalIn);
 
-        let portalOut = new Portal(models[4]);
+        const portalOut = new Portal(models[4]);
         portalOut.position.set(30, 10, 15);
         portalOut.rotateY(Math.PI)
         scene.add(portalOut);
 
-        let ship1 = new Ship(models[0]);
+        const ship1 = new Ship(models[0]);
         ship1.position.set(-5, 10, 15);
         ship1.lookAt(portalIn.position);
         scene.add(ship1);
@@ -86,37 +85,44 @@ export default class Level extends THREE.Group {
             }
         })
 
-        let ship2 = new Ship(models[1]);
-        ship2.position.set(15, 15, 15);
+        const ship2 = new Ship(models[1]);
+        ship2.position.set(15, 20, 15);
         ship2.lookAt(asteroid1.position);
         scene.add(ship2);
         ship2.addFireKey("Digit2");
 
-        let ship3 = new Ship(models[2]);
+        const ship3 = new Ship(models[2]);
         ship3.position.set(0, 5, -20);
         ship3.lookAt(ship2.position);
         scene.add(ship3);
         ship3.addFireKey("Digit3");
 
-        let sun = new Sun();
+        const sun = new Sun();
         sun.position.set(0, -30, 0);
         scene.add(sun);
 
-        let pointlight = new THREE.PointLight(0xfffd00, this.parameters.ambientBrightness, 200);
-        pointlight.position.set(0, -30, 0);
-        scene.add(pointlight);
+        this.pointlight = new THREE.PointLight(0xffa000, this.parameters.sunBrightness);
+        this.pointlight.position.set(0, -30, 0);
+        scene.add(this.pointlight);
 
-        scene.add(new THREE.AmbientLight());
+        this.ambientlight = new THREE.AmbientLight(0xffffff, this.parameters.ambientBrightness)
+        scene.add(this.ambientlight);
 
-        const spotlight = new THREE.SpotLight(0xffd00, 4, 100, Math.PI / 2);
-        spotlight.position.set(0, 10, 0);
+        this.setupGUI();
 
-        this.gui.add(this.parameters, 'ambientBrightness', 0, 20).name("Lighting Intensity").onChange(() => {
-            console.log("changed brightness")
-            scene.remove(pointlight);
-            pointlight = new THREE.AmbientLight(0xffffff, this.parameters.ambientBrightness);
-            scene.add(pointlight)
-        })
         return this;
+    }
+
+    setupGUI() {
+        if (Engine.app.isGUISetup) {return}
+        Engine.app.isGUISetup = true;
+        this.gui.add(this.parameters, 'sunBrightness', 0, 5).name("Sun Intensity").onChange(() => {
+            console.log("changed sun brightness");
+            this.pointlight.intensity = this.parameters.sunBrightness;
+        })
+        this.gui.add(this.parameters, 'ambientBrightness', 0, 5).name("Ambient Intensity").onChange(() => {
+            console.log("changed ambient brightness");
+            this.ambientlight.intensity = this.parameters.ambientBrightness;
+        })
     }
 }

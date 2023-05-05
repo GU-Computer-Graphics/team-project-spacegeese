@@ -95,7 +95,7 @@ export default class Ship extends THREE.Group {
     moveTo(worldPosition) {
         this.moveTarget = worldPosition.clone();
         this.lookAt(this.moveTarget);
-        this.speed = 10;
+        this.speed = 25;
         this.movingToTarget = true;
     }
 

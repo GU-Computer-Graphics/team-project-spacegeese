@@ -5,10 +5,10 @@ let loader = new THREE.TextureLoader();
 let texture = loader.load("./src/images/sunSurfaceMaterial.jpg", () => {
   true;
 });
-const sunMaterial = new THREE.MeshPhongMaterial({
+const sunMaterial = new THREE.MeshBasicMaterial({
   color: 0xffffff,
   map: texture,
-  specular: 0xfffd00,
+  specular: 0xffa000,
   shininess: 36,
   transparency: true,
   opacity: 0.2,
