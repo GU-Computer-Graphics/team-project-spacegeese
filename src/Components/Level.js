@@ -85,17 +85,17 @@ export default class Level extends THREE.Group {
         scene.add(ship3);
         ship3.addFireKey("Digit3");
 
-    let sun = new Sun();
-    sun.position.set(0, -30, 0);
-    scene.add(sun);
+        let sun = new Sun();
+        sun.position.set(0, -30, 0);
+        scene.add(sun);
 
-    const pointlight = new THREE.PointLight(0xfffd00, 10, 200);
-    pointlight.position.set(0, -30, 0);
-    scene.add(pointlight);
+        const pointlight = new THREE.PointLight(0xfffd00, 10, 200);
+        pointlight.position.set(0, -30, 0);
+        scene.add(pointlight);
 
-    const spotlight = new THREE.SpotLight(0xffd00, 4, 100, Math.PI / 2);
-    spotlight.position.set(0, 10, 0);
-    // scene.add(spotlight);
+        const spotlight = new THREE.SpotLight(0xffd00, 4, 100, Math.PI / 2);
+        spotlight.position.set(0, 10, 0);
+        // scene.add(spotlight);
 
         return this;
     }
