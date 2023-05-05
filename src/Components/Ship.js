@@ -20,16 +20,21 @@ export default class Ship extends THREE.Group {
         this.bulletSpeed = 50;
         this.moveTarget = null;
         this.movingToTarget = false;
+        this.fireKey = "";
 
         this.update = this.update.bind(this);
+        this.onBulletCollision = this.onBulletCollision.bind(this);
+        this.onFireKeyPressed = this.onFireKeyPressed.bind(this);
 
         Engine.machine.addCallback(this.update);
-        Engine.eventHandler.subscribe("bulletCollision", (payload) => {
-            if (payload.object.userData.root === this) {
-                console.log("Hit ship at", this.position);
-                this.explode();
-            }
-        });
+        Engine.eventHandler.subscribe("bulletCollision", this.onBulletCollision);
+    }
+
+    onBulletCollision(payload) {
+        if (payload.object.userData.root === this) {
+            console.log("Hit ship at", this.position);
+            this.explode();
+        }
     }
 
     update(delta_t) {
@@ -68,6 +73,18 @@ export default class Ship extends THREE.Group {
         Engine.app.getScene().add(bullet);
     }
 
+    addFireKey(key) {
+        Engine.eventHandler.subscribe("inputListener", this.onFireKeyPressed);
+        this.fireKey = key;
+    }
+
+    onFireKeyPressed(payload) {
+        if (payload.code === this.fireKey && payload.pressed) {
+            this.fire();
+            console.log("fire ship");
+        }
+    }
+
     /**
      * Moves to that position in the world over time
      * @param {THREE.Vector3} worldPosition
@@ -81,5 +98,12 @@ export default class Ship extends THREE.Group {
 
     explode() {
         console.log("Explode Ship!");
+        Engine.machine.removeCallback(this.update);
+        console.log(Engine.eventHandler);
+        Engine.eventHandler.unsubscribe('bulletCollision', this.onBulletCollision)
+        Engine.eventHandler.unsubscribe("inputListener", this.onFireKeyPressed);
+        console.log(Engine.eventHandler);
+        this.removeFromParent();
+        this.removeFromParent();
     }
 }

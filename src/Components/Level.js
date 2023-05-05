@@ -21,6 +21,7 @@ export default class Level extends THREE.Group {
             loader.loadAsync("./src/assets/spaceballs_rv.glb"),
             loader.loadAsync("./src/assets/spaceballs_rv.glb"),
             loader.loadAsync("./src/assets/stargate.glb"),
+            loader.loadAsync("./src/assets/stargate.glb"),
             loader.loadAsync("./src/assets/daphne_planetoid.glb"),
         ]).then((models) => {
             this.setup(scene, models);
@@ -36,26 +37,28 @@ export default class Level extends THREE.Group {
         // ground.position.set(0, -10, 0);
         // scene.add(ground);
 
-        let asteroid1 = new Asteroid(models[4]);
+        let asteroid1 = new Asteroid(models[5]);
         asteroid1.position.set(-10, 5, -10);
         scene.add(asteroid1);
 
-        let portal = new Portal(models[3]);
-        portal.position.set(-20, 10, 15);
-        scene.add(portal);
+        let portalIn = new Portal(models[3]);
+        portalIn.position.set(-30, 10, 15);
+        scene.add(portalIn);
+
+        let portalOut = new Portal(models[4]);
+        portalOut.position.set(30, 10, 15);
+        portalOut.rotateY(Math.PI)
+        scene.add(portalOut);
 
         let ship1 = new Ship(models[0]);
         ship1.position.set(-5, 10, 15);
-        ship1.lookAt(portal.position);
+        ship1.lookAt(portalIn.position);
         scene.add(ship1);
+        ship1.addFireKey("Digit1");
         Engine.eventHandler.subscribe("inputListener", (payload) => {
-            if (payload.code === "Digit1" && payload.pressed) {
-                ship1.fire();
-                console.log("fire ship1");
-            }
             if (payload.code === "KeyQ" && payload.pressed) {
                 ship1.moveTo(
-                    portal.position.clone().add(new THREE.Vector3(-4, 0, 0))
+                    portalIn.position.clone().add(new THREE.Vector3(-4, 0, 0))
                 );
                 console.log("move ship1");
             }
@@ -65,23 +68,13 @@ export default class Level extends THREE.Group {
         ship2.position.set(15, 15, 15);
         ship2.lookAt(asteroid1.position);
         scene.add(ship2);
-        Engine.eventHandler.subscribe("inputListener", (payload) => {
-            if (payload.code === "Digit2" && payload.pressed) {
-                ship2.fire();
-                console.log("fire ship2");
-            }
-        });
+        ship2.addFireKey("Digit2");
 
         let ship3 = new Ship(models[2]);
         ship3.position.set(0, 5, -20);
         ship3.lookAt(ship2.position);
         scene.add(ship3);
-        Engine.eventHandler.subscribe("inputListener", (payload) => {
-            if (payload.code === "Digit3" && payload.pressed) {
-                ship3.fire();
-                console.log("fire ship3");
-            }
-        });
+        ship3.addFireKey("Digit3");
 
         let light = new THREE.AmbientLight();
         scene.add(light);

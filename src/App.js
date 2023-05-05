@@ -5,7 +5,7 @@ import Camera from './Components/Camera.js';
 
 class App {
     constructor() {
-        this.renderer = new THREE.WebGLRenderer();
+        this.renderer = new THREE.WebGLRenderer({antialias: true});
         // Zach: uncomment for shadows
         // this.renderer.shadowMap.enabled = true;
         // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -13,7 +13,7 @@ class App {
         let c = document.getElementById("c");
         c.appendChild(this.canvas);
         this.renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight);
-        this.renderer.setClearColor("black", 1);
+        this.renderer.setClearColor("grey", 1);
     }
 
     render() {
@@ -40,8 +40,8 @@ class App {
             atY: 0,
             atZ: 0,
             eyeX: 0,
-            eyeY: 30,
-            eyeZ: 40,
+            eyeY: 40,
+            eyeZ: 50,
             upX: 0,
             upY: 1,
             upZ: 0,
