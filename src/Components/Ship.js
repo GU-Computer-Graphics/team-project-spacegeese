@@ -41,12 +41,15 @@ export default class Ship extends THREE.Group {
         this.naturalMovement(delta_t);
         if (
             this.movingToTarget &&
-            this.position.distanceTo(this.moveTarget) < 1
+            this.position.distanceTo(this.moveTarget) < 0.2
         ) {
-            this.position.clone(this.moveTarget);
+            this.position.copy(this.moveTarget);
             this.speed = 0;
             this.movingToTarget = false;
+            const targetCopy = this.moveTarget;
             this.moveTarget = null;
+            console.log("shipAtTarget");
+            Engine.eventHandler.dispatch("shipAtTarget", targetCopy);
         }
     }
 

@@ -77,6 +77,14 @@ export default class Level extends THREE.Group {
                 console.log("move ship1");
             }
         });
+        Engine.eventHandler.subscribe("shipAtTarget", target => {
+            console.log(target)
+            console.log(portalIn.position);
+            if (target.equals(portalIn.position.clone().add(new THREE.Vector3(-4, 0, 0)))) {
+                ship1.position.copy(portalOut.position);
+                ship1.moveTo(new THREE.Vector3(-5, 10, 15));
+            }
+        })
 
         let ship2 = new Ship(models[1]);
         ship2.position.set(15, 15, 15);
@@ -97,6 +105,8 @@ export default class Level extends THREE.Group {
         let pointlight = new THREE.PointLight(0xfffd00, this.parameters.ambientBrightness, 200);
         pointlight.position.set(0, -30, 0);
         scene.add(pointlight);
+
+        scene.add(new THREE.AmbientLight());
 
         const spotlight = new THREE.SpotLight(0xffd00, 4, 100, Math.PI / 2);
         spotlight.position.set(0, 10, 0);
