@@ -5,6 +5,7 @@ import Portal from "./Portal.js";
 import Ship from "./Ship.js";
 import { GLTFLoader } from "../lib/gltfLoader.js";
 import Sun from "./Sun.js";
+import Explosion from "./Explosion.js";
 
 export default class Level extends THREE.Group {
     constructor() {
@@ -28,14 +29,22 @@ export default class Level extends THREE.Group {
         });
     }
 
-    setup(scene, models) {
-        // let ground = new THREE.Mesh(
-        //     new THREE.PlaneGeometry(500, 500),
-        //     new THREE.MeshBasicMaterial({ color: 0xeebbee })
-        // );
-        // ground.rotateX(-Math.PI / 2);
-        // ground.position.set(0, -10, 0);
-        // scene.add(ground);
+  setup(scene, models) {
+    let loader = new THREE.TextureLoader();
+    let texture = loader.load("./src/images/space.png", () => {
+      true;
+    });
+    let ground = new THREE.Mesh(
+      new THREE.BoxGeometry(500, 500, 500),
+      new THREE.MeshLambertMaterial({
+        color: 0xeebbee,
+        side: THREE.BackSide,
+        map: texture,
+      })
+    );
+    ground.rotateX(-Math.PI / 2);
+    ground.position.set(0, -10, 0);
+    scene.add(ground);
 
         let asteroid1 = new Asteroid(models[5]);
         asteroid1.position.set(-10, 5, -10);
@@ -76,16 +85,17 @@ export default class Level extends THREE.Group {
         scene.add(ship3);
         ship3.addFireKey("Digit3");
 
-        let light = new THREE.AmbientLight();
-        scene.add(light);
+    let sun = new Sun();
+    sun.position.set(0, -30, 0);
+    scene.add(sun);
 
-        let sun = new Sun();
-        sun.position.set(0, 0, 0);
-        scene.add(sun);
+    const pointlight = new THREE.PointLight(0xfffd00, 10, 200);
+    pointlight.position.set(0, -30, 0);
+    scene.add(pointlight);
 
-        const pointlight = new THREE.PointLight(0xfffd00, 7, 100);
-        pointlight.position.set(0, 0, 0);
-        scene.add(pointlight);
+    const spotlight = new THREE.SpotLight(0xffd00, 4, 100, Math.PI / 2);
+    spotlight.position.set(0, 10, 0);
+    // scene.add(spotlight);
 
         return this;
     }
