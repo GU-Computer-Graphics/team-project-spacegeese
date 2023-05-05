@@ -5,6 +5,7 @@ import Portal from "./Portal.js";
 import Ship from "./Ship.js";
 import { GLTFLoader } from "../lib/gltfLoader.js";
 import Sun from "./Sun.js";
+import Explosion from "./Explosion.js";
 
 export default class Level extends THREE.Group {
   constructor() {
@@ -28,9 +29,17 @@ export default class Level extends THREE.Group {
   }
 
   setup(scene, models) {
+    let loader = new THREE.TextureLoader();
+    let texture = loader.load("./src/images/space.png", () => {
+      true;
+    });
     let ground = new THREE.Mesh(
-      new THREE.PlaneGeometry(500, 500),
-      new THREE.MeshBasicMaterial({ color: 0xeebbee })
+      new THREE.BoxGeometry(500, 500, 500),
+      new THREE.MeshLambertMaterial({
+        color: 0xeebbee,
+        side: THREE.BackSide,
+        map: texture,
+      })
     );
     ground.rotateX(-Math.PI / 2);
     ground.position.set(0, -10, 0);
@@ -81,16 +90,16 @@ export default class Level extends THREE.Group {
     scene.add(light);
 
     let sun = new Sun();
-    sun.position.set(0, 0, 0);
+    sun.position.set(0, -30, 0);
     scene.add(sun);
 
-    const spotlight = new THREE.SpotLight(0xfffd00, 7, 100, Math.PI / 2, 0);
-    spotlight.position.set(0, 0, 0);
-    spotlight.target.position.set(0, 100, 0);
-    scene.add(spotlight);
+    const pointlight = new THREE.PointLight(0xfffd00, 10, 200);
+    pointlight.position.set(0, -30, 0);
+    scene.add(pointlight);
 
-    const spotLightHelper = new THREE.SpotLightHelper(spotlight);
-    scene.add(spotLightHelper);
+    const spotlight = new THREE.SpotLight(0xffd00, 4, 100, Math.PI / 2);
+    spotlight.position.set(0, 10, 0);
+    // scene.add(spotlight);
 
     return this;
   }
