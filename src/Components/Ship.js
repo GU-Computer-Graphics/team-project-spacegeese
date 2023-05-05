@@ -13,6 +13,10 @@ export default class Ship extends THREE.Group {
         this.direction = new THREE.Vector3(0, 0, 1);
         this.speed = 0;
         this.name = "ship";
+        this.mesh.traverse((child) => {
+            child.name = "ship";
+            child.userData.root = this;
+        })
         this.bulletSpeed = 50;
         this.moveTarget = null;
         this.movingToTarget = false;
@@ -21,7 +25,7 @@ export default class Ship extends THREE.Group {
 
         Engine.machine.addCallback(this.update);
         Engine.eventHandler.subscribe("bulletCollision", (payload) => {
-            if (payload.object.parent === this) {
+            if (payload.object.userData.root === this) {
                 console.log("Hit ship at", this.position);
                 this.explode();
             }
@@ -59,6 +63,8 @@ export default class Ship extends THREE.Group {
             .normalize();
         let bullet = new Bullet(currDir.multiplyScalar(this.bulletSpeed));
         bullet.position.copy(this.position);
+        const offset = new THREE.Vector3(0, 0, 4).applyQuaternion(this.quaternion);
+        bullet.position.add(offset);
         Engine.app.getScene().add(bullet);
     }
 

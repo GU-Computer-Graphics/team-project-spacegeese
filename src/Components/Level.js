@@ -28,13 +28,13 @@ export default class Level extends THREE.Group {
     }
 
     setup(scene, models) {
-        let ground = new THREE.Mesh(
-            new THREE.PlaneGeometry(500, 500),
-            new THREE.MeshBasicMaterial({ color: 0xeebbee })
-        );
-        ground.rotateX(-Math.PI / 2);
-        ground.position.set(0, -10, 0);
-        scene.add(ground);
+        // let ground = new THREE.Mesh(
+        //     new THREE.PlaneGeometry(500, 500),
+        //     new THREE.MeshBasicMaterial({ color: 0xeebbee })
+        // );
+        // ground.rotateX(-Math.PI / 2);
+        // ground.position.set(0, -10, 0);
+        // scene.add(ground);
 
         let asteroid1 = new Asteroid(models[4]);
         asteroid1.position.set(-10, 5, -10);
@@ -90,13 +90,9 @@ export default class Level extends THREE.Group {
         sun.position.set(0, 0, 0);
         scene.add(sun);
 
-        const spotlight = new THREE.SpotLight(0xfffd00, 7, 100, Math.PI / 2, 0);
-        spotlight.position.set(0, 0, 0);
-        spotlight.target.position.set(0, 100, 0);
-        scene.add(spotlight);
-
-        const spotLightHelper = new THREE.SpotLightHelper(spotlight);
-        scene.add(spotLightHelper);
+        const pointlight = new THREE.PointLight(0xfffd00, 7, 100);
+        pointlight.position.set(0, 0, 0);
+        scene.add(pointlight);
 
         return this;
     }

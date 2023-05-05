@@ -13,7 +13,7 @@ class App {
         let c = document.getElementById("c");
         c.appendChild(this.canvas);
         this.renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight);
-        this.renderer.setClearColor("grey", 1);
+        this.renderer.setClearColor("black", 1);
     }
 
     render() {
