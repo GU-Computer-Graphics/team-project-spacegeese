@@ -97,9 +97,9 @@ export default class Level extends THREE.Group {
         scene.add(ship3);
         ship3.addFireKey("Digit3");
 
-        const sun = new Sun();
-        sun.position.set(0, -30, 0);
-        scene.add(sun);
+        this.sun = new Sun();
+        this.sun.position.set(0, -30, 0);
+        scene.add(this.sun);
 
         this.pointlight = new THREE.PointLight(0xffa000, this.parameters.sunBrightness);
         this.pointlight.position.set(0, -30, 0);
@@ -119,6 +119,7 @@ export default class Level extends THREE.Group {
         this.gui.add(this.parameters, 'sunBrightness', 0, 5).name("Sun Intensity").onChange(() => {
             console.log("changed sun brightness");
             this.pointlight.intensity = this.parameters.sunBrightness;
+            this.sun.scale.set(this.parameters.sunBrightness / 2, this.parameters.sunBrightness / 2, this.parameters.sunBrightness / 2)
         })
         this.gui.add(this.parameters, 'ambientBrightness', 0, 5).name("Ambient Intensity").onChange(() => {
             console.log("changed ambient brightness");
