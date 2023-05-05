@@ -16,7 +16,9 @@ class App {
         this.renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight);
         this.renderer.setClearColor("grey", 1);
         this.gui = new GUI();
+        this.cameraParams = {};
         this.isGUISetup = false;
+        this.render = this.render.bind(this);
     }
 
     render() {
@@ -34,7 +36,7 @@ class App {
         Engine.app = this;
         this.scene = new THREE.Scene();
 
-        const cameraParams = {
+        this.cameraParams = {
             near: 1,
             far: 1000,
             fov: 75, // degrees
@@ -50,7 +52,7 @@ class App {
             upZ: 0,
         };
 
-        this.camera = new Camera(cameraParams);
+        this.camera = new Camera(this.cameraParams);
         this.camera.setupCameraControls(this.canvas, () => this.render);
 
         // Load initial level
@@ -78,9 +80,81 @@ class App {
                 this.reset();
                 console.log("reset");
             }
+            if (payload.code === "KeyT" && payload.pressed) {
+                this.camera1();
+            }
+            if (payload.code === "KeyY" && payload.pressed) {
+                this.camera2();
+            }
+            if (payload.code === "KeyU" && payload.pressed) {
+                this.camera3();
+            }
         });
         Engine.machine.start();
         console.log(Engine);
+    }
+
+    camera1() {
+        console.log("Camera1");
+        this.cameraParams = {
+            near: 1,
+            far: 1000,
+            fov: 75, // degrees
+            aspectRatio: this.canvas.offsetWidth / this.canvas.offsetHeight,
+            atX: 0,
+            atY: 0,
+            atZ: 0,
+            eyeX: 0,
+            eyeY: 40,
+            eyeZ: 50,
+            upX: 0,
+            upY: 1,
+            upZ: 0,
+        };
+        this.camera = new Camera(this.cameraParams);
+        this.camera.setupCameraControls(this.canvas, this.render);
+    }
+
+    camera2() {
+        console.log("Camera2");
+        this.cameraParams = {
+            near: 1,
+            far: 1000,
+            fov: 75, // degrees
+            aspectRatio: this.canvas.offsetWidth / this.canvas.offsetHeight,
+            atX: 10,
+            atY: 0,
+            atZ: 0,
+            eyeX: -16,
+            eyeY: 13.5,
+            eyeZ: -30,
+            upX: 0,
+            upY: 1,
+            upZ: 0,
+        };
+        this.camera = new Camera(this.cameraParams);
+        this.camera.setupCameraControls(this.canvas, this.render);
+    }
+
+    camera3() {
+        console.log("Camera3");
+        this.cameraParams = {
+            near: 1,
+            far: 1000,
+            fov: 75, // degrees
+            aspectRatio: this.canvas.offsetWidth / this.canvas.offsetHeight,
+            atX: -30,
+            atY: 10,
+            atZ: 15,
+            eyeX: 10,
+            eyeY: 20,
+            eyeZ: 15.25,
+            upX: 0,
+            upY: 1,
+            upZ: 0,
+        };
+        this.camera = new Camera(this.cameraParams);
+        this.camera.setupCameraControls(this.canvas, this.render);
     }
 
     getScene() {
