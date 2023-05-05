@@ -42,6 +42,7 @@ export default class Bullet extends THREE.Group {
         let rc = new THREE.Raycaster(this.lastPos, new THREE.Vector3().copy(this.velocity).normalize(), 0, new THREE.Vector3().subVectors(this.lastPos, this.position).length());
         const intersects = rc.intersectObjects(Engine.app.getScene().children, true);
         if (intersects.length > 0) {
+            console.log(intersects[0]);
             if (intersects[0].object.parent.name === "asteroid" || intersects[0].object.parent.name === "ship") {
                 this.destroy();
             }
